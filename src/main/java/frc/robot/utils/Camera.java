@@ -12,6 +12,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class Camera {
+    int id;
+
+    public Camera(int id){}
+        this.id = id;
+    }
+
     public Map<String, Object> makeHttpRequest(String urlApi) {
         try {
             URL url = new URL(urlApi);
@@ -32,6 +38,13 @@ public class Camera {
             return null;
         }
     }
+    
+    public Map<String, Object> getApriltags() {
+        return makeHttpRequest("192.168.1.76/apriltags/" + id);
+    } 
 
+    public Map<String, Object> getObjectDetections() {
+        return makeHttpRequest("192.168.1.76/models/" + id);
+    } 
     
 }
