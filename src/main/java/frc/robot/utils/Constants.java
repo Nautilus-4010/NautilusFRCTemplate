@@ -44,7 +44,7 @@ public final class Constants {
       // PID constants
       public static final double PID_P = 0.217; // Proportional gain
       public static final double PID_I = 0; // Integral gain
-      public static final double PID_D = 0.0; // Derivative gain
+      public static final double PID_D = 0.0; // Derirvative gain
 
       // Encoder offsets
       public static final double[] ENCODER_OFFSETS = {0, 0, 0, 0}; // {FL, FR, BL, BR} offsets
@@ -116,15 +116,19 @@ public final class Constants {
     public static final int OPEN_CLAW = 5;
     public static final int SPIN_IN = 6;
     public static final int SPIN_OUT = 7;
-
     // Co-Driver constants
+
+    //PID Claw
+    public static final double P_CLAW = 0.5;
 
       // Joystick settings
     public static final int CODRIVER_PORT = 1;
 
       // Sticks
     public static final int SHOOTER_ANG = 1;
-    
+    public static final double kP = 0.1;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
       // Buttons
     public static final int RELOAD = 5;
     public static final int SHOOT = 6;
@@ -155,8 +159,7 @@ public final class Constants {
     public static final int BL_ENC = 10;
     public static final int BR_ENC = 11;
 
-    // PWM ports
-    public static final int SERVO_CLAW = 0;
+   
   }
 
   public static class VisionConstants{
