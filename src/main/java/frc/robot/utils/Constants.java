@@ -113,8 +113,9 @@ public final class Constants {
       // Buttons
     public static final int ZERO_HDG = 1;
     public static final int ROBOT_ORIENTED = 4;
-    public static final int TAKE = 5;
-    public static final int GIVE = 6;
+    public static final int OPEN_CLAW = 5;
+    public static final int SPIN_IN = 6;
+    public static final int SPIN_OUT = 7;
 
     // Co-Driver constants
 
@@ -139,6 +140,8 @@ public final class Constants {
     public static final int FR_STR = 2;
     public static final int BL_STR = 3;
     public static final int BR_STR = 4;
+    public static final int CLAW_R_MOTOR = 5;
+    public static final int CLAW_L_MOTOR = 6;
 
     // Krakens 
       public static final int FL_PWR = 1;
@@ -151,6 +154,9 @@ public final class Constants {
     public static final int FR_ENC = 9;
     public static final int BL_ENC = 10;
     public static final int BR_ENC = 11;
+
+    // PWM ports
+    public static final int SERVO_CLAW = 0;
   }
 
   public static class VisionConstants{

@@ -36,7 +36,7 @@ public class Camera {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
-        }
+        }   
     }
     
     public Map<String, Object> getApriltags() {
