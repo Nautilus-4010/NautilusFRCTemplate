@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.SwerveDriveJoystick;
 import frc.robot.utils.Constants;
-import frc.robot.subsystems.PIDClaw;
 
 public class TeleOp {
     final Joystick driverJoystick = new Joystick(Constants.OperatorConstants.DRIVER_PORT);
@@ -16,7 +15,7 @@ public class TeleOp {
     final JoystickButton spinIn = new JoystickButton (codriverJoystick, Constants.OperatorConstants.SPIN_IN);
     final JoystickButton spinOut = new JoystickButton (codriverJoystick, Constants.OperatorConstants.SPIN_OUT);
     
-    final Joystick pidJoy = new Joystick(codriverJoystick, Constants.OperatorConstants.P_CLAW);
+    final JoystickButton OpenClaw = new JoystickButton(codriverJoystick, Constants.OperatorConstants.OPEN_CLAW);
 
     
 
@@ -29,11 +28,14 @@ public class TeleOp {
             () -> driverJoystick.getRawButton(Constants.OperatorConstants.ROBOT_ORIENTED)));
         zeroHdgBtn.onTrue(new InstantCommand(() -> RobotContainer.swerve.zeroHeading()));
 
-        spinIn.toggleOnTrue(new InstantCommand(() -> RobotContainer.claw.setMotors(1)))
-        spinIn.toggleOnFalse(new InstantCommand(() -> RobotContainer.claw.setMotors(0)))
+        spinIn.toggleOnTrue(new InstantCommand(() -> RobotContainer.claw.setMotors(1)));
+        spinIn.toggleOnFalse(new InstantCommand(() -> RobotContainer.claw.setMotors(0)));
 
-        spinOut.toggleOnTrue(new InstantCommand(() -> RobotContainer.claw.setMotors(-1)))
-        spinOut.toggleOnFalse(new InstantCommand(() -> RobotContainer.claw.setMotors(0)))
+        spinOut.toggleOnTrue(new InstantCommand(() -> RobotContainer.claw.setMotors(-1)));
+        spinOut.toggleOnFalse(new InstantCommand(() -> RobotContainer.claw.setMotors(0)));
+
+        OpenClaw.toggleOnTrue(new InstantCommand(() -> RobotContainer.claw.setClawMotorPos(1)));
+        OpenClaw.toggleOnFalse(new InstantCommand(() -> RobotContainer.claw.setClawMotorPos(0)));
     }
 
     

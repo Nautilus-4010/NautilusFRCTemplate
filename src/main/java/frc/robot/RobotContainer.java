@@ -6,12 +6,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.swerve.Swerve;
 
 public class RobotContainer {
   public static final Swerve swerve = new Swerve();
   public static final Claw claw = new Claw();
-  public static final PIDClaw pidClaw = new PIDClaw();
+
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }

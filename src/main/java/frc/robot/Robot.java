@@ -55,15 +55,7 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {
-    if (pidJoy.getRawButton(1)) {
-      pMotor.set(0.5);
-  } else {
-      pMotor.set(0);
-  }
-  pMotor.set(output);
-
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void teleopExit() {}
@@ -79,9 +71,5 @@ public class Robot extends TimedRobot {
   @Override
   public void testExit() {}
 
-  @Override
-  public void clawInit() {
-      encoder.reset();
-  }
 
 }
