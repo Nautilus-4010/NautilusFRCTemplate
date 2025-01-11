@@ -14,7 +14,7 @@ import com.google.gson.reflect.TypeToken;
 public class Camera {
     int id;
 
-    public Camera(int id){
+    public Camera(int id){}
         this.id = id;
     }
 
