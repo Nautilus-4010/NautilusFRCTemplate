@@ -118,9 +118,6 @@ public final class Constants {
     public static final int SPIN_OUT = 7;
     // Co-Driver constants
 
-    //PID Claw
-    public static final double P_CLAW = 0.5;
-
       // Joystick settings
     public static final int CODRIVER_PORT = 1;
 
@@ -146,6 +143,7 @@ public final class Constants {
     public static final int BR_STR = 4;
     public static final int CLAW_R_MOTOR = 5;
     public static final int CLAW_L_MOTOR = 6;
+    public static final int CLAW_MOTOR = 7;
 
     // Krakens 
       public static final int FL_PWR = 1;
@@ -159,10 +157,9 @@ public final class Constants {
     public static final int BL_ENC = 10;
     public static final int BR_ENC = 11;
 
-   
   }
 
-  public static class VisionConstants{
+  public static class VisionConstants {
     public static final Transform3d[] ROBOT_TO_CAM = {
       new Transform3d(new Translation3d(), new Rotation3d()), // Camera 1
       new Transform3d(new Translation3d(), new Rotation3d()) // Camera 2
@@ -176,4 +173,11 @@ public final class Constants {
 
     public static final double MAX_X = 100; // The maximum x value of the camera in px, so it depends on the resolution
   }
+
+  public static class ClawConstants {
+    public static final double P = 1;
+    public static final double I = 1;
+    public static final double D = 1;
+  }
+
 }
