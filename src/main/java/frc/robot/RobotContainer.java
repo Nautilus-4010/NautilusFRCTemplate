@@ -10,12 +10,7 @@ import frc.robot.subsystems.swerve.Swerve;
 
 public class RobotContainer {
   public static final Swerve swerve = new Swerve();
-<<<<<<< HEAD
 
-=======
-  public static final Claw claw = new Claw();
-  public static final PIDClaw pidClaw = new PIDClaw();
->>>>>>> parent of d4d1246 (Added claw and conection to the vision library)
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }
