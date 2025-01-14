@@ -1,6 +1,7 @@
 package frc.robot.subsystems.swerve;
 
-import com.kauailabs.navx.frc.AHRS;
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -9,7 +10,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
@@ -24,7 +24,7 @@ public class Swerve extends SubsystemBase{
     private final SwerveModule backLeft = new SwerveModule(Constants.HardwareMap.BL_PWR, Constants.HardwareMap.BL_STR, Constants.HardwareMap.BL_ENC, Constants.ModuleConstants.ENCODER_OFFSETS[2], true, false);
     private final SwerveModule backRight = new SwerveModule(Constants.HardwareMap.BR_PWR, Constants.HardwareMap.BR_STR, Constants.HardwareMap.BR_ENC,  Constants.ModuleConstants.ENCODER_OFFSETS[3], false, false);
 
-    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
 
     public int robot_turning_encoder = 0;
 
