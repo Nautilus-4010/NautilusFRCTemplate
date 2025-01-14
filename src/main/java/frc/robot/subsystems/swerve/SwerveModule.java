@@ -2,9 +2,9 @@ package frc.robot.subsystems.swerve;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkLowLevel;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,7 +16,7 @@ import frc.robot.utils.Constants;
 public class SwerveModule {
 
     private final TalonFX driveMotor;
-    private final CANSparkMax turningMotor;
+    private final SparkMax turningMotor;
     private final RelativeEncoder turningEncoder;
     private final PIDController turningPIDController;
     private final int driveTalonFxId;
@@ -33,7 +33,7 @@ public class SwerveModule {
         absoluteEncoder = new CANcoder(absoluteEncoder_id);
 
         driveMotor = new TalonFX(this.driveTalonFxId);
-        turningMotor = new CANSparkMax(this.turningSparkId, MotorType.kBrushless);
+        turningMotor = new SparkMax(this.turningSparkId, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
 
         turningEncoder = turningMotor.getEncoder();
 
