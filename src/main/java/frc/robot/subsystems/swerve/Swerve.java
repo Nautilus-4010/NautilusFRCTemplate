@@ -26,7 +26,7 @@ public class Swerve extends SubsystemBase{
     private final SwerveModule backRight = new SwerveModule(Constants.HardwareMap.BR_PWR, Constants.HardwareMap.BR_STR, Constants.HardwareMap.BR_ENC,  Constants.ModuleConstants.ENCODER_OFFSETS[3], false, false);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    private final Pigeon2 pigeon = new Pigeon2(Constants.HardwareMap.PIGEON);
+    private final Pigeon2 pigeon = new Pigeon2(Constants.HardwareMap.PIGEON, "CANivore");
 
     private boolean usePigeon = true;
 
@@ -135,18 +135,7 @@ public class Swerve extends SubsystemBase{
         backRight.stop();
     }
 
-    // Set the desired state for each swerveModule by giving an array of states
-    public void setStates(SwerveModuleState[] desired_states, ChassisSpeeds chassisSpeeds){
-        speeds = chassisSpeeds;
-
-        SwerveDriveKinematics.desaturateWheelSpeeds(desired_states, Constants.ChassisConstants.MAX_SPD);
-        frontLeft.setDesiredState(desired_states[0]);
-        frontRight.setDesiredState(desired_states[1]);
-        backLeft.setDesiredState(desired_states[2]);
-        backRight.setDesiredState(desired_states[3]);
-    }
-
-    public void setStatesWithoutSpeeds(SwerveModuleState[] desired_states){
+    public void setStates(SwerveModuleState[] desired_states){
         SwerveDriveKinematics.desaturateWheelSpeeds(desired_states, Constants.ChassisConstants.MAX_SPD);
         frontLeft.setDesiredState(desired_states[0]);
         frontRight.setDesiredState(desired_states[1]);

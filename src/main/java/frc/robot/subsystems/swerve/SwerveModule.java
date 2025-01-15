@@ -32,7 +32,7 @@ public class SwerveModule {
         this.absoluteEncoderOffset = absoluteEncoderOffset;
         absoluteEncoder = new CANcoder(absoluteEncoder_id);
 
-        driveMotor = new TalonFX(this.driveTalonFxId);
+        driveMotor = new TalonFX(this.driveTalonFxId, "CANivore");
         turningMotor = new CANSparkMax(this.turningSparkId, MotorType.kBrushless);
 
         turningEncoder = turningMotor.getEncoder();
