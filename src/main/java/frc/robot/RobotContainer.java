@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.swerve.Swerve;
 
 public class RobotContainer {
-  public static final Swerve swerve = new Swerve();
+  public static final Swerve swerve = new Swerve(true);
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");

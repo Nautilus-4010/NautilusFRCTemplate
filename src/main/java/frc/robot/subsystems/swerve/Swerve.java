@@ -1,5 +1,6 @@
 package frc.robot.subsystems.swerve;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -25,6 +26,9 @@ public class Swerve extends SubsystemBase{
     private final SwerveModule backRight = new SwerveModule(Constants.HardwareMap.BR_PWR, Constants.HardwareMap.BR_STR, Constants.HardwareMap.BR_ENC,  Constants.ModuleConstants.ENCODER_OFFSETS[3], false, false);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    private final Pigeon2 pigeon = new Pigeon2(Constants.HardwareMap.PIGEON);
+
+    private boolean usePigeon = true;
 
     public int robot_turning_encoder = 0;
 
@@ -49,7 +53,7 @@ public class Swerve extends SubsystemBase{
             Constants.AutonomousConstants.initialPose);
 
     
-    public Swerve() {
+    public Swerve(boolean usePigeon){ 
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
@@ -57,16 +61,26 @@ public class Swerve extends SubsystemBase{
             } catch (Exception e) {
             }
         }).start();
+
+        this.usePigeon = usePigeon;
     }
 
     // Reset the gyroscope
     public void zeroHeading() {
-        gyro.reset();
+        if (usePigeon) {
+            pigeon.reset();
+        } else {
+            gyro.reset();
+        }
     }
 
     // Returns the actual robot angle
     public double getHeading() {
-        return (-gyro.getAngle());
+        if (usePigeon) {
+            return pigeon.getRotation2d().getRadians();
+        } else {
+            return -gyro.getAngle();
+        }
     }
 
     // Returns a Rotation2d class with the robot angle

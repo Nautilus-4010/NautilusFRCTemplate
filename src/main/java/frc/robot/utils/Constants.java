@@ -134,11 +134,15 @@ public final class Constants {
   }
 
   public static class HardwareMap {
+    //      Rev Robotics
+
     // SPARKS
     public static final int FL_STR = 1;
     public static final int FR_STR = 2;
     public static final int BL_STR = 3;
     public static final int BR_STR = 4;
+
+    //      CTR Electronics
 
     // Krakens 
       public static final int FL_PWR = 1;
@@ -147,10 +151,13 @@ public final class Constants {
       public static final int BR_PWR = 4;
 
     // Swerve encoders
-    public static final int FL_ENC = 8;
-    public static final int FR_ENC = 9;
-    public static final int BL_ENC = 10;
-    public static final int BR_ENC = 11;
+    public static final int FL_ENC = 5;
+    public static final int FR_ENC = 6;
+    public static final int BL_ENC = 7;
+    public static final int BR_ENC = 8;
+
+    // Gyro
+    public static final int PIGEON = 9;
   }
 
   public static class VisionConstants{
