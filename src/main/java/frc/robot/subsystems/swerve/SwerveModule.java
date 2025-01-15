@@ -1,8 +1,13 @@
 package frc.robot.subsystems.swerve;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -38,8 +43,14 @@ public class SwerveModule {
 
         turningEncoder = turningMotor.getEncoder();
 
-        driveMotor.setInverted(driveInverted);
-        turningMotor.setInverted(turningInverted);
+        SparkBaseConfig turningMotorConfig = new SparkMaxConfig();
+        turningMotorConfig.inverted(turningInverted);
+
+        TalonFXConfiguration driveMotorConfigs = new TalonFXConfiguration();
+        if (turningInverted) {  driveMotorConfigs.MotorOutput.withInverted(InvertedValue.Clockwise_Positive); };
+
+        driveMotor.getConfigurator().apply(driveMotorConfigs);
+        turningMotor.configure(turningMotorConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
                 
         // Assigns a pid controller for the turning motor. This one takes a P variable stablish in constants that specifies the proportional PID value
         turningPIDController = new PIDController(ModuleConstants.PID_P, ModuleConstants.PID_I, ModuleConstants.PID_D);
@@ -97,21 +108,21 @@ public class SwerveModule {
         }
 
         // The actual turning encoder rotation
-        var encoder_rotation = new Rotation2d(turningEncoder.getPosition() * ModuleConstants.TURNING_ROT_2_RAD);
+        var encoderRotation = new Rotation2d(turningEncoder.getPosition() * ModuleConstants.TURNING_ROT_2_RAD);
 
         // Optimize the angle for avoiding more than 90 degrees movements
-        SwerveModuleState state = SwerveModuleState.optimize(desiredState, encoder_rotation);
+        desiredState.optimize(encoderRotation);
 
-        state.speedMetersPerSecond *= state.angle.minus(encoder_rotation).getCos();
+        desiredState.speedMetersPerSecond *= desiredState.angle.minus(encoderRotation).getCos();
         
         // The actual turningMotor_position
         double turningMotor_position = turningEncoder.getPosition() * ModuleConstants.TURNING_ROT_2_RAD;
 
         // Assigns a speed to the drive motor
-        driveMotor.set(state.speedMetersPerSecond / Constants.ChassisConstants.MAX_SPD);
+        driveMotor.set(desiredState.speedMetersPerSecond / Constants.ChassisConstants.MAX_SPD);
 
         // Calculates the necessary set speed for turning the turning motor the specified angle
-        turningMotor.set(turningPIDController.calculate(turningMotor_position, state.angle.getRadians()));
+        turningMotor.set(turningPIDController.calculate(turningMotor_position, desiredState.angle.getRadians()));
         //SmartDashboard.putNumber("PID", absoluteEncoder.getDeviceID());
 
         // Prints the swerve status
