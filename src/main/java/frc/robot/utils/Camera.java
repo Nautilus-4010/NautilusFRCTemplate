@@ -12,44 +12,43 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class Camera {
-    int id;
+    private static final String BASE_URL = "http://192.168.1.76"; // Define la URL base como constante
+    private final int id;
 
-    public Camera(int id){
+    public Camera(int id) {
         this.id = id;
     }
 
-    public Map<String, Object> makeHttpRequest(String urlApi) {
+    public Map<String, Object> makeHttpRequest(String endpoint) {
         try {
-            URL url = new URL(urlApi);
+            URL url = new URL(BASE_URL + endpoint);
             URLConnection connection = url.openConnection();
 
-            Reader r = new InputStreamReader(connection.getInputStream());
-            BufferedReader br = new BufferedReader(r);
+            try (Reader reader = new InputStreamReader(connection.getInputStream());
+                BufferedReader br = new BufferedReader(reader)) {
 
-            // Read the entire response into a single string
-            String result = br.lines().reduce("", (accumulator, actual) -> accumulator + actual);
+                // Leer todo el contenido de la respuesta
+                StringBuilder result = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) {
+                    result.append(line);
+                }
 
-            // Convert JSON string to Map
-            Gson gson = new Gson();
-            Map<String, Object> map = gson.fromJson(result, new TypeToken<HashMap<String, Object>>() {}.getType());
-            return map;
+                // Convertir el JSON a un Map
+                Gson gson = new Gson();
+                return gson.fromJson(result.toString(), new TypeToken<HashMap<String, Object>>() {}.getType());
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return null;
-        }   
+        }
     }
-    
+
     public Map<String, Object> getApriltags() {
-        return makeHttpRequest("192.168.1.76/apriltags/" + id);
-    } 
+        return makeHttpRequest("/apriltags/" + id);
+    }
 
     public Map<String, Object> getObjectDetections() {
-        return makeHttpRequest("192.168.1.76/models/" + id);
-    } 
-    
+        return makeHttpRequest("/models/" + id);
+    }
 }
-
-// ╱|、
-//(˚ˎ 。7  
-// |、˜〵          
-// じしˍ,)ノ
