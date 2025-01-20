@@ -8,7 +8,6 @@ import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,7 +22,6 @@ public class SwerveModule {
 
     private final TalonFX driveMotor;
     private final SparkMax turningMotor;
-    private final RelativeEncoder turningEncoder;
     private final PIDController turningPIDController;
     private final int driveTalonFxId;
     private final int turningSparkId;
@@ -40,8 +38,6 @@ public class SwerveModule {
 
         driveMotor = new TalonFX(this.driveTalonFxId);
         turningMotor = new SparkMax(this.turningSparkId, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-
-        turningEncoder = turningMotor.getEncoder();
 
         SparkBaseConfig turningMotorConfig = new SparkMaxConfig();
         turningMotorConfig.inverted(turningInverted);
@@ -64,21 +60,20 @@ public class SwerveModule {
     // Stablish the encoders into 0 position
     public final void resetEncoders(){
         driveMotor.setPosition(0);
-        turningEncoder.setPosition(getAbsoluteEncoderRad() * ModuleConstants.TURNING_ROT_2_RAD ); // Calibrate the turning encoder with the absolute encoder
     }
 
     // Returns a SwerveModuleState object with the module state
     public SwerveModuleState getState() {
         double driveSpeed = driveMotor.get() * ModuleConstants.ENC_RPM_2_M_S;
-        double turningPosition = turningEncoder.getPosition() * ModuleConstants.TURNING_ROT_2_RAD;
+        double turningPosition = getAbsoluteEncoderRad();
 
         return new SwerveModuleState(driveSpeed, new Rotation2d(turningPosition));
     }
 
     // Returns a SwerveModulePosition object with the actual modules position
     public SwerveModulePosition getPosition() {
-        double driveDistance = driveMotor.getPosition().getValue() * ModuleConstants.ENC_ROT_2_M;
-        double turningPosition = turningEncoder.getPosition() * ModuleConstants.TURNING_ROT_2_RAD;
+        double driveDistance = driveMotor.getPosition().getValue().magnitude() * ModuleConstants.ENC_ROT_2_M;
+        double turningPosition = getAbsoluteEncoderRad() * ModuleConstants.TURNING_ROT_2_RAD;
 
         return new SwerveModulePosition(driveDistance, new Rotation2d(turningPosition));
     }
@@ -91,7 +86,7 @@ public class SwerveModule {
 
     // Returns the absolute encoder actual radians
     public double getAbsoluteEncoderRad(){
-        double angle = absoluteEncoder.getAbsolutePosition().getValue();
+        double angle = absoluteEncoder.getAbsolutePosition().getValue().magnitude();
         angle *= 2 * Math.PI;
         angle += absoluteEncoderOffset;
         //SmartDashboard.putString("algo", angle.toString);
@@ -108,25 +103,23 @@ public class SwerveModule {
         }
 
         // The actual turning encoder rotation
-        var encoderRotation = new Rotation2d(turningEncoder.getPosition() * ModuleConstants.TURNING_ROT_2_RAD);
+        var encoderRotation = new Rotation2d(getAbsoluteEncoderRad() * ModuleConstants.TURNING_ROT_2_RAD);
 
         // Optimize the angle for avoiding more than 90 degrees movements
         desiredState.optimize(encoderRotation);
 
         desiredState.speedMetersPerSecond *= desiredState.angle.minus(encoderRotation).getCos();
         
-        // The actual turningMotor_position
-        double turningMotor_position = turningEncoder.getPosition() * ModuleConstants.TURNING_ROT_2_RAD;
 
         // Assigns a speed to the drive motor
         driveMotor.set(desiredState.speedMetersPerSecond / Constants.ChassisConstants.MAX_SPD);
 
         // Calculates the necessary set speed for turning the turning motor the specified angle
-        turningMotor.set(turningPIDController.calculate(turningMotor_position, desiredState.angle.getRadians()));
+        turningMotor.set(turningPIDController.calculate(getAbsoluteEncoderRad(), desiredState.angle.getRadians()));
         //SmartDashboard.putNumber("PID", absoluteEncoder.getDeviceID());
 
         // Prints the swerve status
-        SmartDashboard.putString("Debug", "absolute encoder angle" + absoluteEncoder.getAbsolutePosition().getValue().toString() + "id: " + absoluteEncoder.getDeviceID());
+        //SmartDashboard.putString("Debug", "absolute encoder angle" + absoluteEncoder.getAbsolutePosition().getValue().toString() + "id: " + absoluteEncoder.getDeviceID());
 
 
         

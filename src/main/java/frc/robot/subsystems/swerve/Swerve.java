@@ -26,7 +26,7 @@ public class Swerve extends SubsystemBase{
     private final SwerveModule backRight = new SwerveModule(Constants.HardwareMap.BR_PWR, Constants.HardwareMap.BR_STR, Constants.HardwareMap.BR_ENC,  Constants.ModuleConstants.ENCODER_OFFSETS[3], false, false);
 
     private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
-    private final Pigeon2 pigeon = new Pigeon2(Constants.HardwareMap.PIGEON, "CANivore");
+    private final Pigeon2 pigeon = new Pigeon2(Constants.HardwareMap.PIGEON);
 
     private boolean usePigeon = true;
 
@@ -77,7 +77,7 @@ public class Swerve extends SubsystemBase{
     // Returns the actual robot angle
     public double getHeading() {
         if (usePigeon) {
-            return pigeon.getRotation2d().getRadians();
+            return pigeon.getRotation2d().getDegrees();
         } else {
             return -gyro.getAngle();
         }

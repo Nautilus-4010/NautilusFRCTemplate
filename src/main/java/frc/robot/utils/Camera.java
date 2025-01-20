@@ -11,12 +11,22 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import edu.wpi.first.math.geometry.Transform3d;
+
 public class Camera {
-    private static final String BASE_URL = "http://192.168.1.76"; // Define la URL base como constante
+    private static final String BASE_URL = "http://192.168.1.76"; 
     private final int id;
+
+    public final Transform3d positionTorobot;
 
     public Camera(int id) {
         this.id = id;
+        positionTorobot = new Transform3d();
+    }
+
+    public Camera(int id, Transform3d positionToRobot) {
+        this.id = id;
+        this.positionTorobot = positionToRobot;
     }
 
     public Map<String, Object> makeHttpRequest(String endpoint) {
@@ -45,10 +55,43 @@ public class Camera {
     }
 
     public Map<String, Object> getApriltags() {
-        return makeHttpRequest("/apriltags/" + id);
+        return makeHttpRequest("/apriltags/" + String.valueOf(id));
     }
 
-    public Map<String, Object> getObjectDetections() {
-        return makeHttpRequest("/models/" + id);
+    public Map<String, Object> getObject(int modelId) {
+            return makeHttpRequest("/models/" + String.valueOf(modelId) + String.valueOf(id));
     }
+
+    public boolean hasApriltags() {
+        Map<String, Object> apriltagsData = getApriltags();
+    
+        if (apriltagsData == null || !apriltagsData.containsKey("detections")) {
+            return false; 
+        }
+    
+        Object detections = apriltagsData.get("detections");
+    
+        if (detections instanceof Number) {
+            return ((Number) detections).intValue() > 0;
+        }
+    
+        return false; 
+    }
+    
+    public boolean hasObjects(int modelId) {
+        Map<String, Object> modelData = getObject(modelId);
+    
+        if (modelData == null || !modelData.containsKey("detections")) {
+            return false; 
+        }
+    
+        Object detections = modelData.get("detections");
+    
+        if (detections instanceof Number) {
+            return ((Number) detections).intValue() > 0;
+        }
+    
+        return false; 
+    }
+    
 }
