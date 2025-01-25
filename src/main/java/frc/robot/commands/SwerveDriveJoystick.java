@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants;
 
-public class SwerveDriveJoystick extends Command{
+public class SwerveDriveJoystick extends Command {
     private final Swerve swerve;
     private final Supplier<Double> x, y, z;
     private final Supplier<Boolean> field_relative;

@@ -44,7 +44,7 @@ public final class Constants {
       // PID constants
       public static final double PID_P = 0.217; // Proportional gain
       public static final double PID_I = 0; // Integral gain
-      public static final double PID_D = 0.0; // Derivative gain
+      public static final double PID_D = 0.0; // Derirvative gain
 
       // Encoder offsets
       public static final double[] ENCODER_OFFSETS = {0, 0, 0, 0}; // {FL, FR, BL, BR} offsets
@@ -113,8 +113,6 @@ public final class Constants {
       // Buttons
     public static final int ZERO_HDG = 1;
     public static final int ROBOT_ORIENTED = 4;
-    public static final int TAKE = 5;
-    public static final int GIVE = 6;
 
     // Co-Driver constants
 
@@ -123,7 +121,9 @@ public final class Constants {
 
       // Sticks
     public static final int SHOOTER_ANG = 1;
-    
+    public static final double kP = 0.1;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
       // Buttons
     public static final int RELOAD = 5;
     public static final int SHOOT = 6;
@@ -134,11 +134,15 @@ public final class Constants {
   }
 
   public static class HardwareMap {
+    //      Rev Robotics
+
     // SPARKS
     public static final int FL_STR = 1;
     public static final int FR_STR = 2;
     public static final int BL_STR = 3;
     public static final int BR_STR = 4;
+
+    //      CTR Electronics
 
     // Krakens 
       public static final int FL_PWR = 1;
@@ -147,10 +151,13 @@ public final class Constants {
       public static final int BR_PWR = 4;
 
     // Swerve encoders
-    public static final int FL_ENC = 8;
-    public static final int FR_ENC = 9;
-    public static final int BL_ENC = 10;
-    public static final int BR_ENC = 11;
+    public static final int FL_ENC = 5;
+    public static final int FR_ENC = 6;
+    public static final int BL_ENC = 7;
+    public static final int BR_ENC = 8;
+
+    // Gyro
+    public static final int PIGEON = 9;
   }
 
   public static class VisionConstants{
