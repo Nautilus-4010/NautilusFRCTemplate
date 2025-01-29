@@ -7,12 +7,12 @@ import frc.robot.commands.SwerveDriveJoystick;
 import frc.robot.utils.Constants;
 
 public class TeleOp {
-    final Joystick driverJoystick = new Joystick(Constants.OperatorConstants.DRIVER_PORT);
-    final Joystick codriverJoystick = new Joystick(Constants.OperatorConstants.CODRIVER_PORT);
+    final static Joystick driverJoystick = new Joystick(Constants.OperatorConstants.DRIVER_PORT);
+    final static Joystick codriverJoystick = new Joystick(Constants.OperatorConstants.CODRIVER_PORT);
 
-    final JoystickButton zeroHdgBtn = new JoystickButton(driverJoystick, Constants.OperatorConstants.ZERO_HDG);
+    final static JoystickButton zeroHdgBtn = new JoystickButton(driverJoystick, Constants.OperatorConstants.ZERO_HDG);
 
-    public TeleOp() {
+    public static void initialize() {
         RobotContainer.swerve.setDefaultCommand(new SwerveDriveJoystick(
             RobotContainer.swerve,
             () -> -driverJoystick.getRawAxis(Constants.OperatorConstants.DRIVER_X),
@@ -20,9 +20,7 @@ public class TeleOp {
             () -> -driverJoystick.getRawAxis(Constants.OperatorConstants.DRIVER_Z),
             () -> driverJoystick.getRawButton(Constants.OperatorConstants.ROBOT_ORIENTED)));
         zeroHdgBtn.onTrue(new InstantCommand(() -> RobotContainer.swerve.zeroHeading()));
-
     }
-
     
 }
 
