@@ -43,7 +43,12 @@ public class SwerveModule {
         turningMotorConfig.inverted(turningInverted);
 
         TalonFXConfiguration driveMotorConfigs = new TalonFXConfiguration();
-        if (turningInverted) {  driveMotorConfigs.MotorOutput.withInverted(InvertedValue.Clockwise_Positive); };
+        if (driveInverted) {  
+            driveMotorConfigs.MotorOutput.withInverted(InvertedValue.Clockwise_Positive); 
+        } 
+        else {
+            driveMotorConfigs.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive); 
+        };
 
         driveMotor.getConfigurator().apply(driveMotorConfigs);
         turningMotor.configure(turningMotorConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);

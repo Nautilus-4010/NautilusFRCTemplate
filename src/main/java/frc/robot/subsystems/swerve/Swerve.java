@@ -21,8 +21,8 @@ public class Swerve extends SubsystemBase{
 
     //Defines every single module by giving the drive spark id, the turning spark id, the absolute encoder id, absolute encoder offset, is inverted
     private final SwerveModule frontLeft = new SwerveModule(Constants.HardwareMap.FL_PWR, Constants.HardwareMap.FL_STR, Constants.HardwareMap.FL_ENC, Constants.ModuleConstants.ENCODER_OFFSETS[0], false, false);
-    private final SwerveModule frontRight = new SwerveModule(Constants.HardwareMap.FR_PWR, Constants.HardwareMap.FR_STR, Constants.HardwareMap.FR_ENC, Constants.ModuleConstants.ENCODER_OFFSETS[1], true, false);
-    private final SwerveModule backLeft = new SwerveModule(Constants.HardwareMap.BL_PWR, Constants.HardwareMap.BL_STR, Constants.HardwareMap.BL_ENC, Constants.ModuleConstants.ENCODER_OFFSETS[2], true, false);
+    private final SwerveModule frontRight = new SwerveModule(Constants.HardwareMap.FR_PWR, Constants.HardwareMap.FR_STR, Constants.HardwareMap.FR_ENC, Constants.ModuleConstants.ENCODER_OFFSETS[1], false, false);
+    private final SwerveModule backLeft = new SwerveModule(Constants.HardwareMap.BL_PWR, Constants.HardwareMap.BL_STR, Constants.HardwareMap.BL_ENC, Constants.ModuleConstants.ENCODER_OFFSETS[2], false, false);
     private final SwerveModule backRight = new SwerveModule(Constants.HardwareMap.BR_PWR, Constants.HardwareMap.BR_STR, Constants.HardwareMap.BR_ENC,  Constants.ModuleConstants.ENCODER_OFFSETS[3], false, false);
 
     private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);

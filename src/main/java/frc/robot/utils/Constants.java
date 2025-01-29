@@ -112,7 +112,7 @@ public final class Constants {
 
       // Buttons
     public static final int ZERO_HDG = 1;
-    public static final int ROBOT_ORIENTED = 4;
+    public static final int ROBOT_ORIENTED = 5;
 
     // Co-Driver constants
 

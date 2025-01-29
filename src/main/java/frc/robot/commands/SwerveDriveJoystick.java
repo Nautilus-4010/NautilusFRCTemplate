@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants;
@@ -54,7 +55,7 @@ public class SwerveDriveJoystick extends Command {
         zSpeed = zLimiter.calculate(zSpeed) * Constants.ChassisConstants.MAX_ANG_SPD;
 
         ChassisSpeeds chassisSpeeds;
-        if (field_relative.get()){
+        if (!field_relative.get()){
             //Relative to field
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, zSpeed, swerve.getRotation2d());
         } else {
