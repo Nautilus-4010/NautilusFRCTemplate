@@ -73,18 +73,15 @@ public final class Constants {
   }
 
   public static class AutonomousConstants {
-    public static final Pose2d initialPose = new Pose2d(
-      new Translation2d(15.34, 5.555), 
-      new Rotation2d()
-    );
+    public static final Pose2d initialPose = new Pose2d();
 
-    public static final double P = 1;
-    public static final double I = 1;
-    public static final double D = 1;
+    public static final double P = 1.5;
+    public static final double I = 0;
+    public static final double D = 0;
 
-    public static final double P_Z = 1;
-    public static final double I_Z = 1;
-    public static final double D_Z = 1;
+    public static final double P_Z = 3;
+    public static final double I_Z = 0;
+    public static final double D_Z = 0;
 
     public static final double MAX_SPD = ChassisConstants.MAX_SPD; // In meters per second
     public static final double MAX_ACCEL = ChassisConstants.MAX_ACCEL; // In meters per second^2
@@ -94,7 +91,8 @@ public final class Constants {
     public static final TrapezoidProfile.Constraints Z_CONTROLER = 
                 new TrapezoidProfile.Constraints(
                         MAX_ANG_SPD,
-                        MAX_ANG_ACCEL);
+                        MAX_ANG_ACCEL
+    );
 
     public static final double MAX_DIST_SPK = 5;
   }
