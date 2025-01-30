@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -14,11 +15,15 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.utils.Constants;
+
 
 public class RobotContainer {
   public static final Swerve swerve = new Swerve(true);
@@ -28,28 +33,40 @@ public class RobotContainer {
   }
   public static Command getTestCommand() {
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(Constants.AutonomousConstants.MAX_SPD, Constants.AutonomousConstants.MAX_ACCEL);
-
+    
     swerve.resetOdometry(new Pose2d());
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
         swerve.getPose(),
         List.of(
-          new Translation2d(0, 3),
-          new Translation2d(1.5, 3),
-          new Translation2d(1.5, 1.5),
-          new Translation2d(0, 1.5),
-          new Translation2d(0, 4.5),
-          new Translation2d(-1.5, 4.5),
-          new Translation2d(-1.5, 3),
-          new Translation2d(0, 3),
-          new Translation2d(1.5, 6),
-          new Translation2d(1.5, 7.5),
-          new Translation2d(0, 7.5)
+          new Translation2d(3, 0),
+          new Translation2d(3, -1.5),
+          new Translation2d(1.5, -1.5),
+          new Translation2d(1.5, 0),
+          new Translation2d(4.5, 0),
+          new Translation2d(4.5, 1.5),
+          new Translation2d(3, 1.5),
+          new Translation2d(3, 0),
+          new Translation2d(6, -1.5),
+          new Translation2d(7.5, -1.5),
+          new Translation2d(7.5, 0)
         ),
         new Pose2d(0, 0, Rotation2d.fromDegrees(3600)),
         trajectoryConfig
-        
     );
+
+    StructArrayPublisher<Pose2d> trajectoryPublisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("Trajectory", Pose2d.struct).publish();
+
     
+    List<Pose2d> points = new ArrayList<>();
+    for (int i = 0; i < trajectory.getStates().size(); i++) {
+      var state = trajectory.getStates().get(i);
+      Pose2d pose = state.poseMeters;
+      points.add(pose);
+    }
+    trajectoryPublisher.set(points.toArray(new Pose2d[0]));
+
+
     PIDController xController = new PIDController(Constants.AutonomousConstants.P, Constants.AutonomousConstants.I, Constants.AutonomousConstants.D);
     PIDController yController = new PIDController(Constants.AutonomousConstants.P, Constants.AutonomousConstants.I, Constants.AutonomousConstants.D);
     ProfiledPIDController zController = new ProfiledPIDController(Constants.AutonomousConstants.P_Z, 
