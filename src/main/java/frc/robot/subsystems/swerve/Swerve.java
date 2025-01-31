@@ -28,8 +28,6 @@ public class Swerve extends SubsystemBase{
 
     private boolean usePigeon = true;
 
-    public int robotTurningEncoder = 0;
-
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(Constants.ChassisConstants.KINEMATICS,
             new Rotation2d(0), getSwerveModulePos(),
             Constants.AutonomousConstants.initialPose
