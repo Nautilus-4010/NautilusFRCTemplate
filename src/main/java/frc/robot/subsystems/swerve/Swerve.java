@@ -6,20 +6,16 @@ import com.studica.frc.AHRS.NavXComType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants;
 
 public class Swerve extends SubsystemBase{
-
-    private ChassisSpeeds speeds = new ChassisSpeeds(0, 0, 0);
 
     //Defines every single module by giving the drive spark id, the turning spark id, the absolute encoder id, absolute encoder offset, is inverted
     private final SwerveModule frontLeft = new SwerveModule(Constants.HardwareMap.FL_PWR, Constants.HardwareMap.FL_STR, Constants.HardwareMap.FL_ENC, Constants.ModuleConstants.ENCODER_OFFSETS[0], false, false);
@@ -32,27 +28,12 @@ public class Swerve extends SubsystemBase{
 
     private boolean usePigeon = true;
 
-    public int robot_turning_encoder = 0;
+    public int robotTurningEncoder = 0;
 
-    // Convert to module states
-    public SwerveModuleState[] moduleStates;
-
-    private final SwerveModulePosition[] swerve_module_position = new SwerveModulePosition[]{
-        frontLeft.getPosition(),
-        frontRight.getPosition(),
-        backLeft.getPosition(),
-        backRight.getPosition()
-        };
-    
-    public final SwerveModuleState[] swerve_module_states = new SwerveModuleState[]{
-        frontLeft.getState(),
-        frontRight.getState(),
-        backLeft.getState(),
-        backRight.getState()
-        };
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(Constants.ChassisConstants.KINEMATICS,
-            new Rotation2d(0), swerve_module_position,
-            Constants.AutonomousConstants.initialPose);
+            new Rotation2d(0), getSwerveModulePos(),
+            Constants.AutonomousConstants.initialPose
+    );
 
     
     public Swerve(boolean usePigeon){ 
@@ -65,6 +46,24 @@ public class Swerve extends SubsystemBase{
         }).start();
 
         this.usePigeon = usePigeon;
+    }
+
+    public SwerveModulePosition[] getSwerveModulePos() {
+        return new SwerveModulePosition[]{
+            frontLeft.getPosition(),
+            frontRight.getPosition(),
+            backLeft.getPosition(),
+            backRight.getPosition()
+        };
+    }
+    
+    public SwerveModuleState[] getSwerveModuleStates() {
+        return new SwerveModuleState[]{
+            frontLeft.getState(),
+            frontRight.getState(),
+            backLeft.getState(),
+            backRight.getState()
+        };
     }
 
     // Reset the gyroscope
@@ -98,27 +97,12 @@ public class Swerve extends SubsystemBase{
 
     // Resets the Odometer
     public void resetOdometry(Pose2d pose) {
-        odometer.resetPosition(getRotation2d(), swerve_module_position, pose);
+        odometer.resetPosition(getRotation2d(), getSwerveModulePos(), pose);
     }
 
     // Updates the Odometer
     public void updateOdometry(){
-        updateModulePosition();
-        odometer.update(getRotation2d(), swerve_module_position);
-    }
-    
-    // Update the module states reading
-    public void updateModuleStates(){
-        swerve_module_states[0] = frontLeft.getState();
-        swerve_module_states[1] = frontRight.getState();
-        swerve_module_states[2] = backLeft.getState();
-        swerve_module_states[3] = backRight.getState();
-    }
-    public void updateModulePosition(){
-        swerve_module_position[0] = frontLeft.getPosition();
-        swerve_module_position[1] = frontRight.getPosition();
-        swerve_module_position[2] = backLeft.getPosition();
-        swerve_module_position[3] = backRight.getPosition();
+        odometer.update(getRotation2d(), getSwerveModulePos());
     }
 
     @Override
@@ -128,6 +112,7 @@ public class Swerve extends SubsystemBase{
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
         NetworkTableInstance.getDefault().getStructTopic("Robot position", Pose2d.struct).publish().set(getPose());
+        NetworkTableInstance.getDefault().getStructArrayTopic("Detected module states", SwerveModuleState.struct).publish().set(getSwerveModuleStates());
     }
 
     // Stop the swerve modules
@@ -138,15 +123,11 @@ public class Swerve extends SubsystemBase{
         backRight.stop();
     }
 
-    public void setStates(SwerveModuleState[] desired_states){
-        SwerveDriveKinematics.desaturateWheelSpeeds(desired_states, Constants.ChassisConstants.MAX_SPD);
-        frontLeft.setDesiredState(desired_states[0]);
-        frontRight.setDesiredState(desired_states[1]);
-        backLeft.setDesiredState(desired_states[2]);
-        backRight.setDesiredState(desired_states[3]);
-    }
-
-    public ChassisSpeeds getSpeeds(){
-        return speeds;
+    public void setStates(SwerveModuleState[] desiredStates){
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.ChassisConstants.MAX_SPD);
+        frontLeft.setDesiredState(desiredStates[0]);
+        frontRight.setDesiredState(desiredStates[1]);
+        backLeft.setDesiredState(desiredStates[2]);
+        backRight.setDesiredState(desiredStates[3]);
     }
 }

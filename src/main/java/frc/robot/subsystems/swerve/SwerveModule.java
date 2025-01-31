@@ -13,7 +13,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.Constants;
 
 import frc.robot.utils.Constants.ModuleConstants;
@@ -100,33 +99,17 @@ public class SwerveModule {
 
     // Move the module by giving a SwerveModuleState object
     public void setDesiredState(SwerveModuleState desiredState) {
-
         // Avoid auto alining while the robot is being operate
         if (Math.abs(desiredState.speedMetersPerSecond) < 0.09){
             stop();
             return;
         }
 
-        // The actual turning encoder rotation
-        var encoderRotation = new Rotation2d(getAbsoluteEncoderRad() * ModuleConstants.TURNING_ROT_2_RAD);
-
-        // Optimize the angle for avoiding more than 90 degrees movements
+        Rotation2d encoderRotation = new Rotation2d(getAbsoluteEncoderRad() * ModuleConstants.TURNING_ROT_2_RAD);
         desiredState.optimize(encoderRotation);
-
         desiredState.speedMetersPerSecond *= desiredState.angle.minus(encoderRotation).getCos();
-        
 
-        // Assigns a speed to the drive motor
         driveMotor.set(desiredState.speedMetersPerSecond / Constants.ChassisConstants.MAX_SPD);
-
-        // Calculates the necessary set speed for turning the turning motor the specified angle
         turningMotor.set(turningPIDController.calculate(getAbsoluteEncoderRad(), desiredState.angle.getRadians()));
-        //SmartDashboard.putNumber("PID", absoluteEncoder.getDeviceID());
-
-        // Prints the swerve status
-        //SmartDashboard.putString("Debug", "absolute encoder angle" + absoluteEncoder.getAbsolutePosition().getValue().toString() + "id: " + absoluteEncoder.getDeviceID());
-
-
-        
     }
 }
