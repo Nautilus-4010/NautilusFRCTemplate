@@ -64,7 +64,7 @@ public final class Constants {
     
     // Maximum accelerations
     public static final double MAX_ACCEL = 3;
-    public static final double MAX_ANG_ACCEL = 3;
+    public static final double MAX_ANG_ACCEL = 1.5;
   }
 
   public static class AutonomousConstants {
